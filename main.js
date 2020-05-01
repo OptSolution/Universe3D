@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 
 function createWindow() {
     // Create the browser window.
@@ -14,8 +14,35 @@ function createWindow() {
     // and load the index.html of the app.
     mainWindow.loadFile('index.html')
 
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    // Add mune
+    const mainMenuTemplate = [
+        {
+            label: "File",
+            submenu: [
+                {
+                    label: "Quit",
+                    accelerator: "Ctrl+Q",
+                    click() {
+                        mainWindow.close();
+                    }
+                }
+            ]
+        },
+        {
+            label: "Help",
+            submenu: [
+                {
+                    label: 'Devtool',
+                    accelerator: 'Ctrl+D',
+                    click() {
+                        mainWindow.webContents.openDevTools();
+                    }
+                }
+            ]
+        }
+    ];
+    const menu = Menu.buildFromTemplate(mainMenuTemplate);
+    Menu.setApplicationMenu(menu);
 }
 
 // This method will be called when Electron has finished
