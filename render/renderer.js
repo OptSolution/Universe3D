@@ -16,24 +16,24 @@ document.body.appendChild(renderer.domElement);
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf0f0f0);
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+scene.add(camera);
 var controls = new THREE.TrackballControls(camera, renderer.domElement);
 
 // add light
-var light = new THREE.DirectionalLight(0xFFFFFF, 0.3);
-light.position.set(-1, 2, 4);
-scene.add(light);
-var light_a = new THREE.AmbientLight(0xFFFFFF, 0.3);
+var light_a = new THREE.AmbientLight(0xFFFFFF, 0.2);
 scene.add(light_a);
+var light = new THREE.PointLight(0xFFFFFF, 0.5);
+camera.add(light);
 
 // add geometry
 const objLoader = new THREE.OBJLoader();
 objLoader.load('data/bunny.obj', (root) => {
-    var this_material = new THREE.MeshNormalMaterial();
-    root.traverse(function (child) {
-        if (child instanceof THREE.Mesh) {
-            child.material = this_material;
-        }
-    });
+    // var this_material = new THREE.MeshNormalMaterial();
+    // root.traverse(function (child) {
+    //     if (child instanceof THREE.Mesh) {
+    //         child.material = this_material;
+    //     }
+    // });
     scene.add(root);
 });
 
