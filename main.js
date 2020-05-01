@@ -21,10 +21,8 @@ function createWindow() {
             submenu: [
                 {
                     label: "Quit",
-                    accelerator: "Ctrl+Q",
-                    click() {
-                        mainWindow.close();
-                    }
+                    accelerator: "CmdOrCtrl+Q",
+                    role: "quit"
                 }
             ]
         },
@@ -33,7 +31,7 @@ function createWindow() {
             submenu: [
                 {
                     label: 'Devtool',
-                    accelerator: 'Ctrl+D',
+                    accelerator: 'CmdOrCtrl+D',
                     click() {
                         mainWindow.webContents.openDevTools();
                     }
