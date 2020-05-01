@@ -7,9 +7,9 @@ var { OrbitControls } = require('three/examples/js/controls/OrbitControls');
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-var canvas = document.createElement( 'canvas' );
-var context = canvas.getContext( 'webgl2', { alpha: false } );
-var renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context } );
+var canvas = document.createElement('canvas');
+var context = canvas.getContext('webgl2', { alpha: false });
+var renderer = new THREE.WebGLRenderer({ canvas: canvas, context: context });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -23,6 +23,13 @@ scene.add(cube);
 camera.position.z = 5;
 controls.update();
 
+window.onresize = function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    controls.update();
+}
+
 function animate() {
     requestAnimationFrame(animate);
     cube.rotation.x += 0.01;
@@ -30,4 +37,5 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
+
 animate();
