@@ -2,7 +2,7 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 var THREE = require('three');
-var OrbitControls = require('three/examples/js/controls/OrbitControls');
+var TrackballControls = require('three/examples/js/controls/TrackballControls');
 var OBJLoader = require('three/examples/js/loaders/OBJLoader');
 
 // add dom
@@ -14,8 +14,9 @@ document.body.appendChild(renderer.domElement);
 
 // init scene
 var scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf0f0f0);
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-var controls = new THREE.OrbitControls(camera, renderer.domElement);
+var controls = new THREE.TrackballControls(camera, renderer.domElement);
 
 // add light
 var light = new THREE.DirectionalLight(0xFFFFFF, 0.3);
@@ -27,6 +28,12 @@ scene.add(light_a);
 // add geometry
 const objLoader = new THREE.OBJLoader();
 objLoader.load('data/bunny.obj', (root) => {
+    var this_material = new THREE.MeshNormalMaterial();
+    root.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+            child.material = this_material;
+        }
+    });
     scene.add(root);
 });
 
