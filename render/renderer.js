@@ -3,6 +3,7 @@
 // All of the Node.js APIs are available in this process.
 var THREE = require('three');
 var OrbitControls = require('three/examples/js/controls/OrbitControls');
+var OBJLoader = require('three/examples/js/loaders/OBJLoader');
 
 // add dom
 var canvas = document.createElement('canvas');
@@ -17,15 +18,17 @@ var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHei
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 // add light
-var light = new THREE.DirectionalLight(0xFFFFFF, 1);
+var light = new THREE.DirectionalLight(0xFFFFFF, 0.3);
 light.position.set(-1, 2, 4);
 scene.add(light);
+var light_a = new THREE.AmbientLight(0xFFFFFF, 0.3);
+scene.add(light_a);
 
 // add geometry
-var geometry = new THREE.BoxGeometry();
-var material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
-var cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+const objLoader = new THREE.OBJLoader();
+objLoader.load('data/bunny.obj', (root) => {
+    scene.add(root);
+});
 
 // set camera
 camera.position.z = 5;
