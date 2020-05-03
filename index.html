@@ -13,7 +13,11 @@
 </head>
 
 <body>
-    <script src="./render/renderer.js"></script>
-</body> 
+    <script>
+        require = require('esm')(module);
+        var path  = require('path');
+        require(path.resolve('./render/renderer.js'));
+    </script>
+</body>
 
 </html>

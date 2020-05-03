@@ -2,7 +2,7 @@
   "name": "universe3d",
   "version": "1.0.0",
   "description": "A client for 3D geometry",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "start": "electron ."
   },
@@ -10,10 +10,12 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^8.2.3",
+    "path": "^0.12.7",
     "three": "^0.115.0"
   },
   "dependencies": {
     "@types/node": "^13.13.4",
-    "@types/three": "^0.103.2"
+    "@types/three": "^0.103.2",
+    "esm": "^3.2.25"
   }
 }

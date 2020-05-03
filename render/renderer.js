@@ -1,9 +1,9 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-var THREE = require('three');
-var TrackballControls = require('three/examples/js/controls/TrackballControls');
-var OBJLoader = require('three/examples/js/loaders/OBJLoader');
+import * as THREE from 'three';
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 // add dom
 var canvas = document.createElement('canvas');
@@ -17,7 +17,7 @@ var scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf0f0f0);
 var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 scene.add(camera);
-var controls = new THREE.TrackballControls(camera, renderer.domElement);
+var controls = new TrackballControls(camera, renderer.domElement);
 
 // add light
 var light_a = new THREE.AmbientLight(0xFFFFFF, 0.2);
@@ -29,13 +29,14 @@ var box_min = new THREE.Vector3(Infinity, Infinity, Infinity);
 var box_max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
 
 // add geometry
-const objLoader = new THREE.OBJLoader();
+const objLoader = new OBJLoader();
 objLoader.load('data/bunny.obj', (root) => {
+    console.log('loading...');
     root.traverse(function (child) {
-        if (child instanceof THREE.Mesh) {
+        if (child.type === 'Mesh') {
             child.geometry.computeBoundingBox();
-            // let helper = new THREE.Box3Helper(child.geometry.boundingBox, 0xffff00);
-            // scene.add(helper);
+            let helper = new THREE.Box3Helper(child.geometry.boundingBox, 0xffff00);
+            scene.add(helper);
             box_min.x = Math.min(child.geometry.boundingBox.min.x, box_min.x);
             box_min.y = Math.min(child.geometry.boundingBox.min.y, box_min.y);
             box_min.z = Math.min(child.geometry.boundingBox.min.z, box_min.z);
@@ -51,6 +52,8 @@ objLoader.load('data/bunny.obj', (root) => {
 });
 
 function reset_camera() {
+    console.log("Scene box min : " + box_min.x + " , " + box_min.y + " , " + box_min.z);
+    console.log("Scene box max : " + box_max.x + " , " + box_max.y + " , " + box_max.z);
     let scene_box = new THREE.Box3(box_min, box_max);
     let scene_center = scene_box.getCenter();
     let scene_size = scene_box.getSize();
