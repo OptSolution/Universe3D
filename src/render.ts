@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:48:41
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-03 17:31:43
+ * @LastEditTime: 2020-05-03 17:48:52
  */
 
 import * as THREE from 'three';
@@ -40,16 +40,15 @@ objLoader.load('data/bunny.obj', (root) => {
   console.log('loading...');
   root.traverse(function (child) {
     if (child.type === 'Mesh') {
-      let this_child = <THREE.Mesh>child;
-      this_child.geometry.computeBoundingBox();
+      (<THREE.Mesh>child).geometry.computeBoundingBox();
       // let helper = new THREE.Box3Helper(child.geometry.boundingBox, 0xffff00);
       // scene.add(helper);
-      box_min.x = Math.min(this_child.geometry.boundingBox.min.x, box_min.x);
-      box_min.y = Math.min(this_child.geometry.boundingBox.min.y, box_min.y);
-      box_min.z = Math.min(this_child.geometry.boundingBox.min.z, box_min.z);
-      box_max.x = Math.max(this_child.geometry.boundingBox.max.x, box_max.x);
-      box_max.y = Math.max(this_child.geometry.boundingBox.max.y, box_max.y);
-      box_max.z = Math.max(this_child.geometry.boundingBox.max.z, box_max.z);
+      box_min.x = Math.min((<THREE.Mesh>child).geometry.boundingBox.min.x, box_min.x);
+      box_min.y = Math.min((<THREE.Mesh>child).geometry.boundingBox.min.y, box_min.y);
+      box_min.z = Math.min((<THREE.Mesh>child).geometry.boundingBox.min.z, box_min.z);
+      box_max.x = Math.max((<THREE.Mesh>child).geometry.boundingBox.max.x, box_max.x);
+      box_max.y = Math.max((<THREE.Mesh>child).geometry.boundingBox.max.y, box_max.y);
+      box_max.z = Math.max((<THREE.Mesh>child).geometry.boundingBox.max.z, box_max.z);
     }
   });
   scene.add(root);
