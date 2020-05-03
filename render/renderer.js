@@ -3,7 +3,7 @@
 // All of the Node.js APIs are available in this process.
 import * as THREE from 'three';
 import { TrackballControls } from "three/examples/jsm/controls/TrackballControls";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 
 // add dom
 var canvas = document.createElement('canvas');
@@ -29,14 +29,14 @@ var box_min = new THREE.Vector3(Infinity, Infinity, Infinity);
 var box_max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
 
 // add geometry
-const objLoader = new OBJLoader();
+const objLoader = new OBJLoader2();
 objLoader.load('data/bunny.obj', (root) => {
     console.log('loading...');
     root.traverse(function (child) {
         if (child.type === 'Mesh') {
             child.geometry.computeBoundingBox();
-            let helper = new THREE.Box3Helper(child.geometry.boundingBox, 0xffff00);
-            scene.add(helper);
+            // let helper = new THREE.Box3Helper(child.geometry.boundingBox, 0xffff00);
+            // scene.add(helper);
             box_min.x = Math.min(child.geometry.boundingBox.min.x, box_min.x);
             box_min.y = Math.min(child.geometry.boundingBox.min.y, box_min.y);
             box_min.z = Math.min(child.geometry.boundingBox.min.z, box_min.z);
