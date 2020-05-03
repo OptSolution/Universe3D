@@ -2,19 +2,24 @@
   "name": "universe3d",
   "version": "1.0.0",
   "description": "A client for 3D geometry",
-  "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "run": "electron ./dist/index.js",
+    "start": "npm run build && electron ./dist/index.js"
   },
   "author": "Chen Wang",
   "license": "MIT",
   "devDependencies": {
     "electron": "^8.2.3",
     "path": "^0.12.7",
-    "three": "^0.115.0"
+    "three": "^0.115.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@types/node": "^13.13.4",
+    "@types/node": "^12.12.37",
     "@types/three": "^0.103.2",
     "esm": "^3.2.25"
   }

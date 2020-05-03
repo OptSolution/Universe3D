@@ -2,22 +2,22 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Universe3D</title>
-    <style>
-        body {
-            margin: 0px;
-            overflow: hidden;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Universe3D</title>
+  <style>
+    body {
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
 </head>
 
 <body>
-    <script>
-        require = require('esm')(module);
-        var path  = require('path');
-        require(path.resolve('./render/renderer.js'));
-    </script>
+  <script>
+    require = require('esm')(module);
+    var path = require('path');
+    require(path.join(__dirname, "./dist/render"));
+  </script>
 </body>
 
 </html>
