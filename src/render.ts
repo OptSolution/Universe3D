@@ -4,21 +4,21 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:48:41
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-04 22:03:47
+ * @LastEditTime: 2020-05-04 22:21:39
  */
 
 import U3D = require('./u3d/u3d');
 
 var u3dMain: U3D.U3dMain = new U3D.U3dMain();
 animate();
+window.onresize = function () {
+  u3dMain.onresize();
+}
+
+// TODO : update Loader
 U3D.U3dLoader.loadOBJ(u3dMain);
 
-window.onresize = function () {
-  u3dMain.renderer.setSize(window.innerWidth, window.innerHeight);
-  u3dMain.camera.aspect = window.innerWidth / window.innerHeight;
-  u3dMain.camera.updateProjectionMatrix();
-  u3dMain.control.update();
-}
+// some function
 
 function animate() {
   requestAnimationFrame(animate);

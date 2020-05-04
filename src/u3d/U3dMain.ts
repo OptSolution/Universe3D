@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-04 21:55:01
+ * @LastEditTime: 2020-05-04 22:21:28
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
@@ -46,5 +46,13 @@ export class U3dMain {
     // init scene box
     this.box_min = new THREE.Vector3(Infinity, Infinity, Infinity);
     this.box_max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
+  }
+
+  // event when window resize
+  onresize() {
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.control.update();
   }
 }
