@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-04 22:21:28
+ * @LastEditTime: 2020-05-04 22:27:06
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
@@ -22,7 +22,7 @@ export class U3dMain {
     this.init();
   }
 
-  init() {
+  private init() {
     // add dom
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('webgl2', { alpha: false });

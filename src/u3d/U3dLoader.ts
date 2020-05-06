@@ -4,14 +4,14 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-04 21:30:48
+ * @LastEditTime: 2020-05-06 21:14:15
  */
 import { U3dMain } from "./U3dMain";
 import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 import THREE = require("three");
 
 export namespace U3dLoader {
-  export function resetCamera(u3d: U3dMain) {
+  function resetCamera(u3d: U3dMain) {
     console.log("Scene box min : " + u3d.box_min.x + " , " + u3d.box_min.y + " , " + u3d.box_min.z);
     console.log("Scene box max : " + u3d.box_max.x + " , " + u3d.box_max.y + " , " + u3d.box_max.z);
     let scene_box = new THREE.Box3(u3d.box_min, u3d.box_max);
@@ -30,10 +30,14 @@ export namespace U3dLoader {
     u3d.control.update();
   }
 
-  export function loadOBJ(u3d: U3dMain) {
+  export function load(path: string, u3d: U3dMain) {
+    loadOBJ(path, u3d);
+  }
+
+  function loadOBJ(path: string, u3d: U3dMain) {
     // add geometry
     const objLoader = new OBJLoader2();
-    objLoader.load('data/bunny.obj', (root) => {
+    objLoader.load(path, (root) => {
       console.log('loading...');
       root.traverse(function (child) {
         if (child.type === 'Mesh') {
