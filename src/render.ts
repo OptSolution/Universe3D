@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:48:41
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-06 21:13:55
+ * @LastEditTime: 2020-05-06 21:31:07
  */
 
 import { ipcRenderer, remote } from 'electron';
@@ -24,6 +24,22 @@ ipcRenderer.on('action', (event, arg) => {
   }
 });
 
+window.ondragstart = (event: DragEvent) => {
+  event.preventDefault();
+}
+
+window.ondragover = (event: DragEvent) => {
+  event.preventDefault();
+}
+
+window.ondrop = (event: DragEvent) => {
+  for (let index = 0; index < event.dataTransfer.files.length; index++) {
+    const element = event.dataTransfer.files[index];
+    let path = element.path;
+    U3D.U3dLoader.load(path, u3dMain);
+  }
+}
+
 // some function
 
 function animate() {
@@ -40,7 +56,10 @@ function loadFile() {
     properties: ['openFile']
   }).then(result => {
     if (!result.canceled) {
-      U3D.U3dLoader.load(result.filePaths[0].toString(), u3dMain);
+      result.filePaths.forEach((path) => {
+        U3D.U3dLoader.load(path.toString(), u3dMain);
+      }
+      )
     }
   }).catch(err => {
     console.log(err);
