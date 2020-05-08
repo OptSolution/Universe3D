@@ -4,12 +4,13 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-08 18:03:19
+ * @LastEditTime: 2020-05-08 18:33:19
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
 import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
+const { dialog } = require('electron').remote
 
 export namespace U3dLoader {
   function resetCamera(u3d: U3dMain) {
@@ -69,6 +70,11 @@ export namespace U3dLoader {
 
       // set camera
       resetCamera(u3d);
+    }, (xhr) => {
+      // TODO : need UI
+      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    }, (err) => {
+      console.error(err.message);
     });
   }
 
@@ -104,6 +110,11 @@ export namespace U3dLoader {
       u3d.scene.add(mesh);
 
       resetCamera(u3d);
+    }, (xhr) => {
+      // TODO : need UI
+      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    }, (err) => {
+      console.error(err.message);
     })
   }
 }
