@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:48:41
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-06 21:31:07
+ * @LastEditTime: 2020-05-08 17:19:23
  */
 
 import { ipcRenderer, remote } from 'electron';
@@ -51,7 +51,7 @@ function animate() {
 function loadFile() {
   remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
     filters: [
-      { name: "Model Files", extensions: ['obj'] },
+      { name: "Model Files", extensions: ['obj', 'ply'] },
       { name: 'All Files', extensions: ['*'] }],
     properties: ['openFile']
   }).then(result => {

@@ -4,11 +4,12 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-06 21:14:15
+ * @LastEditTime: 2020-05-08 18:03:19
  */
 import { U3dMain } from "./U3dMain";
-import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 import THREE = require("three");
+import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
+import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
 
 export namespace U3dLoader {
   function resetCamera(u3d: U3dMain) {
@@ -30,8 +31,28 @@ export namespace U3dLoader {
     u3d.control.update();
   }
 
+  function updateBOX(u3d: U3dMain, geometry: THREE.Geometry | THREE.BufferGeometry) {
+    geometry.computeBoundingBox();
+    // let helper = new THREE.Box3Helper(geometry.boundingBox, 0xffff00);
+    // u3d.scene.add(helper);
+    u3d.box_min.x = Math.min(geometry.boundingBox.min.x, u3d.box_min.x);
+    u3d.box_min.y = Math.min(geometry.boundingBox.min.y, u3d.box_min.y);
+    u3d.box_min.z = Math.min(geometry.boundingBox.min.z, u3d.box_min.z);
+    u3d.box_max.x = Math.max(geometry.boundingBox.max.x, u3d.box_max.x);
+    u3d.box_max.y = Math.max(geometry.boundingBox.max.y, u3d.box_max.y);
+    u3d.box_max.z = Math.max(geometry.boundingBox.max.z, u3d.box_max.z);
+  }
+
   export function load(path: string, u3d: U3dMain) {
-    loadOBJ(path, u3d);
+    let index = path.lastIndexOf(".");
+    let ext = path.substr(index + 1);
+    if (ext === 'obj') {
+      loadOBJ(path, u3d);
+    } else if (ext === 'ply') {
+      loadPLY(path, u3d);
+    } else {
+      alert('Cannot load ' + path);
+    }
   }
 
   function loadOBJ(path: string, u3d: U3dMain) {
@@ -41,15 +62,7 @@ export namespace U3dLoader {
       console.log('loading...');
       root.traverse(function (child) {
         if (child.type === 'Mesh') {
-          (<THREE.Mesh>child).geometry.computeBoundingBox();
-          // let helper = new THREE.Box3Helper(child.geometry.boundingBox, 0xffff00);
-          // scene.add(helper);
-          u3d.box_min.x = Math.min((<THREE.Mesh>child).geometry.boundingBox.min.x, u3d.box_min.x);
-          u3d.box_min.y = Math.min((<THREE.Mesh>child).geometry.boundingBox.min.y, u3d.box_min.y);
-          u3d.box_min.z = Math.min((<THREE.Mesh>child).geometry.boundingBox.min.z, u3d.box_min.z);
-          u3d.box_max.x = Math.max((<THREE.Mesh>child).geometry.boundingBox.max.x, u3d.box_max.x);
-          u3d.box_max.y = Math.max((<THREE.Mesh>child).geometry.boundingBox.max.y, u3d.box_max.y);
-          u3d.box_max.z = Math.max((<THREE.Mesh>child).geometry.boundingBox.max.z, u3d.box_max.z);
+          updateBOX(u3d, (<THREE.Mesh>child).geometry);
         }
       });
       u3d.scene.add(root);
@@ -57,5 +70,40 @@ export namespace U3dLoader {
       // set camera
       resetCamera(u3d);
     });
+  }
+
+  function loadPLY(path: string, u3d: U3dMain) {
+    const plyloader = new PLYLoader();
+    plyloader.load(path, (geometry) => {
+      console.log('loading...');
+      updateBOX(u3d, geometry);
+      geometry.computeVertexNormals();
+
+      // material
+      // let defaultMaterial = new THREE.MeshStandardMaterial({ color: 0xDCF1FF });
+      // defaultMaterial.name = 'defaultMaterial';
+
+      // let defaultVertexColorMaterial = new THREE.MeshStandardMaterial({ color: 0xDCF1FF });
+      // defaultVertexColorMaterial.name = 'defaultVertexColorMaterial';
+      // defaultVertexColorMaterial.vertexColors = true;
+
+      // let defaultLineMaterial = new THREE.LineBasicMaterial();
+      // defaultLineMaterial.name = 'defaultLineMaterial';
+
+      // let defaultPointMaterial = new THREE.PointsMaterial({ size: 0.1 });
+      // defaultPointMaterial.name = 'defaultPointMaterial';
+
+      // let runtimeMaterials: any = {};
+      // runtimeMaterials[defaultMaterial.name] = defaultMaterial;
+      // runtimeMaterials[defaultVertexColorMaterial.name] = defaultVertexColorMaterial;
+      // runtimeMaterials[defaultLineMaterial.name] = defaultLineMaterial;
+      // runtimeMaterials[defaultPointMaterial.name] = defaultPointMaterial;
+
+      let material = new THREE.MeshStandardMaterial({ color: 0xDCF1FF, vertexColors: true });
+      let mesh = new THREE.Mesh(geometry, material);
+      u3d.scene.add(mesh);
+
+      resetCamera(u3d);
+    })
   }
 }
