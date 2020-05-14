@@ -4,20 +4,12 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 15:53:49
+ * @LastEditTime: 2020-05-14 21:14:20
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import THREE = require('three');
-import dat = require('dat.gui');
-
-class guiText {
-  message: string;
-
-  constructor() {
-    this.message = 'dat.gui';
-  }
-}
+import { U3dUI } from './ui/u3dUI'
 
 export class U3dMain {
   scene: THREE.Scene;
@@ -26,12 +18,14 @@ export class U3dMain {
   control: TrackballControls;
   box_min: THREE.Vector3;
   box_max: THREE.Vector3;
+  gui: U3dUI;
 
-  constructor(gui: dat.GUI) {
-    this.init(gui);
+  constructor() {
+    this.gui = new U3dUI();
+    this.init();
   }
 
-  private init(gui: dat.GUI) {
+  private init() {
     // add dom
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('webgl2', { alpha: false });
@@ -45,6 +39,7 @@ export class U3dMain {
     this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.scene.add(this.camera);
     this.control = new TrackballControls(this.camera, this.renderer.domElement);
+    this.gui.addScene(this.scene);
 
     // add light
     var light_a = new THREE.AmbientLight(0xFFFFFF, 0.2);
@@ -55,9 +50,6 @@ export class U3dMain {
     // init scene box
     this.box_min = new THREE.Vector3(Infinity, Infinity, Infinity);
     this.box_max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
-
-    let text = new guiText();
-    gui.add(text, 'message');
   }
 
   // event when window resize

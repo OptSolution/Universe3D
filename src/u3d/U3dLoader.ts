@@ -4,13 +4,12 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-08 18:33:19
+ * @LastEditTime: 2020-05-14 21:01:29
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
 import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
-const { dialog } = require('electron').remote
 
 export namespace U3dLoader {
   function resetCamera(u3d: U3dMain) {
