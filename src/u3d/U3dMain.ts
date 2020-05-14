@@ -4,11 +4,20 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-04 22:27:06
+ * @LastEditTime: 2020-05-14 15:53:49
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import THREE = require('three');
+import dat = require('dat.gui');
+
+class guiText {
+  message: string;
+
+  constructor() {
+    this.message = 'dat.gui';
+  }
+}
 
 export class U3dMain {
   scene: THREE.Scene;
@@ -18,11 +27,11 @@ export class U3dMain {
   box_min: THREE.Vector3;
   box_max: THREE.Vector3;
 
-  constructor() {
-    this.init();
+  constructor(gui: dat.GUI) {
+    this.init(gui);
   }
 
-  private init() {
+  private init(gui: dat.GUI) {
     // add dom
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('webgl2', { alpha: false });
@@ -46,6 +55,9 @@ export class U3dMain {
     // init scene box
     this.box_min = new THREE.Vector3(Infinity, Infinity, Infinity);
     this.box_max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
+
+    let text = new guiText();
+    gui.add(text, 'message');
   }
 
   // event when window resize

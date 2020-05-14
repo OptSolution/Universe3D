@@ -51,6 +51,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@types/dat.gui@^0.7.5":
+  version "0.7.5"
+  resolved "http://r.cnpmjs.org/@types/dat.gui/download/@types/dat.gui-0.7.5.tgz#8f4f87300ae553a57b246a7bf1b9fe5e13ca8b79"
+  integrity sha1-j0+HMArlU6V7JGp78bn+XhPKi3k=
+
 "@types/node@^12.0.12", "@types/node@^12.12.37":
   version "12.12.39"
   resolved "http://r.cnpmjs.org/@types/node/download/@types/node-12.12.39.tgz#532d25c1e639d89dd6f3aa1d7b3962e3e7fa943d"
@@ -188,6 +193,11 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "http://r.cnpmjs.org/core-util-is/download/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
+
+dat.gui@^0.7.7:
+  version "0.7.7"
+  resolved "http://r.cnpmjs.org/dat.gui/download/dat.gui-0.7.7.tgz#7f96dbd21621a76385203659aebfa264ee6ae89b"
+  integrity sha1-f5bb0hYhp2OFIDZZrr+iZO5q6Js=
 
 debug@^2.6.9:
   version "2.6.9"

@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:45:29
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-06 21:05:57
+ * @LastEditTime: 2020-05-14 16:01:13
  */
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
@@ -13,8 +13,8 @@ import * as path from "path";
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1080,
+    height: 720,
     webPreferences: {
       nodeIntegration: true
     }

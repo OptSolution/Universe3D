@@ -4,13 +4,16 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:48:41
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-08 17:19:23
+ * @LastEditTime: 2020-05-14 15:57:42
  */
 
 import { ipcRenderer, remote } from 'electron';
 import U3D = require('./u3d/u3d');
+import dat = require('dat.gui');
 
-var u3dMain: U3D.U3dMain = new U3D.U3dMain();
+var gui:dat.GUI = new dat.GUI();
+var u3dMain: U3D.U3dMain = new U3D.U3dMain(gui);
+
 animate();
 window.onresize = function () {
   u3dMain.onresize();
