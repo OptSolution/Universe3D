@@ -4,42 +4,18 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 22:31:20
+ * @LastEditTime: 2020-05-14 23:37:01
  */
 import dat = require('dat.gui');
 import THREE = require('three');
-
-class U3dSceneMenu {
-  background: string;
-  // axis
-  showAxis: boolean;
-  axisLength: number;
-  //grid
-  showGrid: boolean;
-  gridSize: number;
-  gridDivisions: number;
-  gridColorCenterLine: string;
-  gridColorGrid: string;
-
-  constructor() {
-    this.background = '#f0f0f0';
-
-    this.showAxis = false;
-    this.axisLength = 0.3;
-
-    this.showGrid = false;
-    this.gridSize = 1;
-    this.gridDivisions = 10;
-    this.gridColorCenterLine = '#444444';
-    this.gridColorGrid = '#888888';
-  }
-}
+import { U3dSceneMenu } from './u3dSceneMenu'
 
 export class U3dUI {
   gui: dat.GUI;
   modelFolder: dat.GUI;
   sceneFolder: dat.GUI;
   lightsFolder: dat.GUI;
+
   private sceneMenu: U3dSceneMenu;
 
   constructor() {
@@ -65,12 +41,12 @@ export class U3dUI {
     let axisFolder = this.sceneFolder.addFolder('Axis');
     axisFolder.add(this.sceneMenu, 'showAxis').onChange((show) => {
       axesHelper.visible = show;
-    })
+    });
     axisFolder.add(this.sceneMenu, 'axisLength').onChange((length) => {
       axesHelper.scale.x = length;
       axesHelper.scale.y = length;
       axesHelper.scale.z = length;
-    })
+    });
 
     // grid
     let gridHelper = new THREE.GridHelper(this.sceneMenu.gridSize, this.sceneMenu.gridDivisions);
@@ -79,6 +55,6 @@ export class U3dUI {
     let gridFolder = this.sceneFolder.addFolder('Grid');
     gridFolder.add(this.sceneMenu, 'showGrid').onChange((show) => {
       gridHelper.visible = show;
-    })
+    });
   }
 }

@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:45:29
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 16:01:13
+ * @LastEditTime: 2020-05-14 23:40:44
  */
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
@@ -26,16 +26,6 @@ function createWindow() {
   // Add mune
   const mainMenuTemplate: MenuItemConstructorOptions[] = [
     {
-      label: "Universe3D",
-      submenu: [
-        {
-          label: "Quit",
-          accelerator: "CmdOrCtrl+Q",
-          role: "quit"
-        }
-      ]
-    },
-    {
       label: "File",
       submenu: [
         {
@@ -43,6 +33,14 @@ function createWindow() {
           click() {
             mainWindow.webContents.send('action', 'openFile');
           }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: "Quit",
+          accelerator: "CmdOrCtrl+Q",
+          role: "quit"
         }
       ]
     },
@@ -59,6 +57,19 @@ function createWindow() {
       ]
     }
   ];
+  if (process.platform === 'darwin') {
+    mainMenuTemplate.unshift({
+      label: app.getName(),
+      submenu: [
+        {
+          label: 'Quit',
+          accelerator: 'CmdOrCtrl+Q',
+          role: "quit"
+        }
+      ]
+    });
+  }
+
   const menu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(menu);
 }
