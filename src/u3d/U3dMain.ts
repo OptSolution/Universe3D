@@ -4,13 +4,12 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 21:03:23
+ * @LastEditTime: 2020-05-15 21:51:43
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import THREE = require('three');
 import { U3dUI } from './ui/u3dUI'
-import { U3dModelMenu } from './ui/u3dModelMenu';
 
 export class U3dMain {
   scene: THREE.Scene;

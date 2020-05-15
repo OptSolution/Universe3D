@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 21:06:18
+ * @LastEditTime: 2020-05-15 22:51:01
  */
 import dat = require('dat.gui');
 import THREE = require('three');
@@ -80,7 +80,7 @@ export class U3dUI {
   }
 
   addModel(mesh: THREE.Mesh, filename: string) {
-    let this_folder = this.modelFolder.addFolder(filename);
+    let this_folder = this.modelFolder.addFolder((filename + ' - ' + mesh.uuid).substr(0, 30));
     let this_model = new U3dModelMenu();
 
     this.addMeshCommon(this_folder, this_model, mesh);
@@ -94,7 +94,7 @@ export class U3dUI {
   }
 
   addOBJ(obj: THREE.Object3D, filename: string) {
-    let obj_folder = this.modelFolder.addFolder(filename);
+    let obj_folder = this.modelFolder.addFolder((filename + ' - ' + obj.uuid).substr(0, 30));
     let obj_model = new U3dModelMenu();
     let childrenNum = obj.children.length;
 
@@ -102,11 +102,10 @@ export class U3dUI {
       // only one child and it's mesh
       this.addMeshCommon(obj_folder, obj_model, <THREE.Mesh>obj.children[0]);
     } else {
-      let count = 1;
       obj.traverse((child) => {
         // add each mesh
         if (child.type === 'Mesh') {
-          let this_folder = obj_folder.addFolder('Mesh' + String(count));
+          let this_folder = obj_folder.addFolder((child.uuid).substr(0, 30));
           let this_model = new U3dModelMenu();
           this.addMeshCommon(this_folder, this_model, <THREE.Mesh>child);
           // remove mesh
@@ -115,7 +114,6 @@ export class U3dUI {
             this_folder.parent.removeFolder(this_folder);
           }
           this_folder.add(this_model, 'Remove');
-          count += 1;
         }
       })
     }
