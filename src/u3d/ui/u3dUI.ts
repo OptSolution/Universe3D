@@ -4,12 +4,13 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 22:51:01
+ * @LastEditTime: 2020-05-15 23:55:59
  */
 import dat = require('dat.gui');
 import THREE = require('three');
 import { U3dSceneMenu } from './u3dSceneMenu'
 import { U3dModelMenu } from "./u3dModelMenu";
+import { U3dLightMenu } from "./u3dLightMenu";
 
 export class U3dUI {
   mainGui: dat.GUI;
@@ -29,6 +30,10 @@ export class U3dUI {
 
     this.sceneMenu = new U3dSceneMenu();
   }
+
+  // ====================================================== //
+  // ===================== Scene ========================== //
+  // ====================================================== //
 
   addScene(scene: THREE.Scene) {
     // background
@@ -60,6 +65,10 @@ export class U3dUI {
       gridHelper.visible = show;
     });
   }
+
+  // ====================================================== //
+  // ====================== Model ========================= //
+  // ====================================================== //
 
   private addMeshCommon(folder: dat.GUI, guiData: U3dModelMenu, mesh: THREE.Mesh) {
     // geometry
@@ -124,5 +133,59 @@ export class U3dUI {
       obj_folder.parent.removeFolder(obj_folder);
     }
     obj_folder.add(obj_model, 'Remove');
+  }
+
+  // ====================================================== //
+  // ====================== Light ========================= //
+  // ====================================================== //
+  addLight(lightConfig: U3dLightMenu, lightsFolder: dat.GUI, light: THREE.Light) {
+    // clean folder
+    lightsFolder.__controllers.forEach((controller) => controller.remove());
+    lightsFolder.__controllers = [];
+
+    // add controller
+    lightsFolder.add(lightConfig, 'Bind').domElement.innerHTML = lightConfig.Bind;
+    lightsFolder.addColor(lightConfig, 'Color').onChange((colorValue) => {
+      colorValue = parseInt(colorValue.replace('#', '0x'), 16);
+      light.color = new THREE.Color(colorValue);
+    });
+    lightsFolder.add(lightConfig, 'Intensity').onChange((intensity) => {
+      light.intensity = intensity;
+    });
+
+    switch (light.type) {
+      case 'PointLight':
+        lightsFolder.add(lightConfig, 'Distance').onChange((distance) => {
+          (<THREE.PointLight>light).distance = distance;
+        });
+        lightsFolder.add(lightConfig, 'Decay').onChange((decay) => {
+          (<THREE.PointLight>light).decay = decay;
+        });
+        if (lightConfig.Bind === 'Scene') {
+          lightsFolder.add(lightConfig, 'Position_x').onChange((x) => {
+            light.position.x = x;
+          });
+          lightsFolder.add(lightConfig, 'Position_y').onChange((y) => {
+            light.position.y = y;
+          });
+          lightsFolder.add(lightConfig, 'Position_z').onChange((z) => {
+            light.position.z = z;
+          });
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    // remove
+    lightConfig.Remove = () => {
+      light.parent.remove(light);
+      lightsFolder.parent.removeFolder(lightsFolder);
+    }
+    lightsFolder.add(lightConfig, 'Remove');
+
+    // rename
+    lightsFolder.name = (lightConfig.Type + ' - ' + light.uuid).substr(0, 30);
   }
 }

@@ -4,12 +4,13 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 21:51:43
+ * @LastEditTime: 2020-05-16 00:07:48
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import THREE = require('three');
 import { U3dUI } from './ui/u3dUI'
+import { U3dLightMenu } from './ui/u3dLightMenu';
 
 export class U3dMain {
   scene: THREE.Scene;
@@ -42,14 +43,37 @@ export class U3dMain {
     this.gui.addScene(this.scene);
 
     // add light
-    var light_a = new THREE.AmbientLight(0xFFFFFF, 0.2);
-    this.scene.add(light_a);
-    var light = new THREE.PointLight(0xFFFFFF, 0.5);
-    this.camera.add(light);
+    this.initLight();
 
     // init scene box
     this.box_min = new THREE.Vector3(Infinity, Infinity, Infinity);
     this.box_max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
+  }
+
+  private initLight() {
+    // init ambient light
+    {
+      let light_ambient_config = new U3dLightMenu();
+      light_ambient_config.Intensity = 0.2;
+      let color = parseInt(light_ambient_config.Color.replace('#', '0x'), 16);
+      let light_ambient = new THREE.AmbientLight(color, light_ambient_config.Intensity);
+      this.scene.add(light_ambient);
+      let light_ambient_folder = this.gui.lightsFolder.addFolder((light_ambient_config.Type + ' - ' + light_ambient.uuid).substr(0, 30));
+      this.gui.addLight(light_ambient_config, light_ambient_folder, light_ambient);
+    }
+
+    // init point light
+    {
+      let light_point_config = new U3dLightMenu();
+      light_point_config.Type = 'PointLight';
+      light_point_config.Intensity = 0.5;
+      light_point_config.Bind = 'Camera';
+      let color = parseInt(light_point_config.Color.replace('#', '0x'), 16);
+      let light_point = new THREE.PointLight(color, light_point_config.Intensity);
+      this.camera.add(light_point);
+      let light_point_folder = this.gui.lightsFolder.addFolder((light_point_config.Type + ' - ' + light_point.uuid).substr(0, 30));
+      this.gui.addLight(light_point_config, light_point_folder, light_point);
+    }
   }
 
   // event when window resize
