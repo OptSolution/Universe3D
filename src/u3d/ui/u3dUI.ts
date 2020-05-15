@@ -4,13 +4,12 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 14:16:15
+ * @LastEditTime: 2020-05-15 14:39:04
  */
 import dat = require('dat.gui');
 import THREE = require('three');
 import { U3dSceneMenu } from './u3dSceneMenu'
 import { U3dModelMenu } from "./u3dModelMenu";
-import { strict } from 'assert';
 
 export class U3dUI {
   gui: dat.GUI;
@@ -19,7 +18,6 @@ export class U3dUI {
   lightsFolder: dat.GUI;
 
   private sceneMenu: U3dSceneMenu;
-  private modelMenu: U3dModelMenu;
 
   constructor() {
     this.gui = new dat.GUI();
@@ -76,5 +74,9 @@ export class U3dUI {
       vMenu.domElement.innerHTML = String((<THREE.BufferGeometry>mesh.geometry).getAttribute('position').count);
       fMenu.domElement.innerHTML = String((<THREE.BufferGeometry>mesh.geometry).index.count / 3);
     }
+
+    this_folder.add(this_model, 'Visible').onChange((v) => {
+      mesh.visible = v;
+    })
   }
 }
