@@ -4,12 +4,21 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 21:00:35
+ * @LastEditTime: 2020-05-15 21:23:35
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
 import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
+
+class loadBar {
+  File: string;
+  Loading: number;
+  constructor() {
+    this.File = '';
+    this.Loading = 0;
+  }
+}
 
 export namespace U3dLoader {
   function resetCamera(u3d: U3dMain) {
@@ -65,6 +74,14 @@ export namespace U3dLoader {
     const objLoader = new OBJLoader2();
     objLoader.setUseIndices(true);
     let name = filename(path);
+
+    // gui for loading
+    let loadingFolder = u3d.gui.modelFolder.addFolder('Loading');
+    let loadingMenu = new loadBar();
+    loadingFolder.add(loadingMenu, 'File').domElement.innerHTML = name;
+    loadingFolder.add(loadingMenu, 'Loading', 0, 100).listen();
+    loadingFolder.open();
+
     objLoader.load(path, (root) => {
       console.log('loading...');
       console.log(root);
@@ -73,13 +90,15 @@ export namespace U3dLoader {
           updateBOX(u3d, (<THREE.Mesh>child).geometry);
         }
       });
-      u3d.addOBJ(root, name);
 
+      loadingFolder.parent.removeFolder(loadingFolder);
+      u3d.addOBJ(root, name);
       // set camera
       resetCamera(u3d);
     }, (xhr) => {
-      // TODO : need UI
-      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      let process = xhr.loaded / xhr.total * 100
+      loadingMenu.Loading = process;
+      console.log(process + '% loaded');
     }, (err) => {
       console.error(err.message);
     });
@@ -88,19 +107,28 @@ export namespace U3dLoader {
   function loadPLY(path: string, u3d: U3dMain) {
     const plyloader = new PLYLoader();
     let name = filename(path);
+
+    // gui for loading
+    let loadingFolder = u3d.gui.modelFolder.addFolder('Loading');
+    let loadingMenu = new loadBar();
+    loadingFolder.add(loadingMenu, 'File').domElement.innerHTML = name;
+    loadingFolder.add(loadingMenu, 'Loading', 0, 100).listen();
+    loadingFolder.open();
+
     plyloader.load(path, (geometry) => {
       console.log('loading...');
       updateBOX(u3d, geometry);
       geometry.computeVertexNormals();
-
       let material = new THREE.MeshStandardMaterial({ color: 0xDCF1FF, vertexColors: true });
       let mesh = new THREE.Mesh(geometry, material);
-      u3d.addMesh(mesh, name);
 
+      loadingFolder.parent.removeFolder(loadingFolder);
+      u3d.addMesh(mesh, name);
       resetCamera(u3d);
     }, (xhr) => {
-      // TODO : need UI
-      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      let process = xhr.loaded / xhr.total * 100
+      loadingMenu.Loading = process;
+      console.log(process + '% loaded');
     }, (err) => {
       console.error(err.message);
     })
