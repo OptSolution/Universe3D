@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 14:39:04
+ * @LastEditTime: 2020-05-15 21:06:18
  */
 import dat = require('dat.gui');
 import THREE = require('three');
@@ -12,7 +12,7 @@ import { U3dSceneMenu } from './u3dSceneMenu'
 import { U3dModelMenu } from "./u3dModelMenu";
 
 export class U3dUI {
-  gui: dat.GUI;
+  mainGui: dat.GUI;
   modelFolder: dat.GUI;
   sceneFolder: dat.GUI;
   lightsFolder: dat.GUI;
@@ -20,10 +20,10 @@ export class U3dUI {
   private sceneMenu: U3dSceneMenu;
 
   constructor() {
-    this.gui = new dat.GUI();
-    this.modelFolder = this.gui.addFolder('Models');
-    this.sceneFolder = this.gui.addFolder('Scene');
-    this.lightsFolder = this.gui.addFolder('Lights');
+    this.mainGui = new dat.GUI();
+    this.modelFolder = this.mainGui.addFolder('Models');
+    this.sceneFolder = this.mainGui.addFolder('Scene');
+    this.lightsFolder = this.mainGui.addFolder('Lights');
 
     this.modelFolder.open();
 
@@ -61,12 +61,10 @@ export class U3dUI {
     });
   }
 
-  addModel(mesh: THREE.Mesh, filename: string) {
-    let this_folder = this.modelFolder.addFolder(filename);
-    let this_model = new U3dModelMenu();
-
-    let vMenu = this_folder.add(this_model, 'Vertices');
-    let fMenu = this_folder.add(this_model, 'Faces');
+  private addMeshCommon(folder: dat.GUI, guiData: U3dModelMenu, mesh: THREE.Mesh) {
+    // geometry
+    let vMenu = folder.add(guiData, 'Vertices');
+    let fMenu = folder.add(guiData, 'Faces');
     if (mesh.geometry.type === 'Geometry') {
       vMenu.domElement.innerHTML = String((<THREE.Geometry>mesh.geometry).vertices.length);
       fMenu.domElement.innerHTML = String((<THREE.Geometry>mesh.geometry).faces.length);
@@ -75,8 +73,58 @@ export class U3dUI {
       fMenu.domElement.innerHTML = String((<THREE.BufferGeometry>mesh.geometry).index.count / 3);
     }
 
-    this_folder.add(this_model, 'Visible').onChange((v) => {
+    // visible
+    folder.add(guiData, 'Visible').onChange((v) => {
       mesh.visible = v;
     })
+  }
+
+  addModel(mesh: THREE.Mesh, filename: string) {
+    let this_folder = this.modelFolder.addFolder(filename);
+    let this_model = new U3dModelMenu();
+
+    this.addMeshCommon(this_folder, this_model, mesh);
+
+    // remove
+    this_model.Remove = () => {
+      mesh.parent.remove(mesh);
+      this_folder.parent.removeFolder(this_folder);
+    }
+    this_folder.add(this_model, 'Remove');
+  }
+
+  addOBJ(obj: THREE.Object3D, filename: string) {
+    let obj_folder = this.modelFolder.addFolder(filename);
+    let obj_model = new U3dModelMenu();
+    let childrenNum = obj.children.length;
+
+    if (childrenNum === 1) {
+      // only one child and it's mesh
+      this.addMeshCommon(obj_folder, obj_model, <THREE.Mesh>obj.children[0]);
+    } else {
+      let count = 1;
+      obj.traverse((child) => {
+        // add each mesh
+        if (child.type === 'Mesh') {
+          let this_folder = obj_folder.addFolder('Mesh' + String(count));
+          let this_model = new U3dModelMenu();
+          this.addMeshCommon(this_folder, this_model, <THREE.Mesh>child);
+          // remove mesh
+          this_model.Remove = () => {
+            (<THREE.Mesh>child).parent.remove(<THREE.Mesh>child);
+            this_folder.parent.removeFolder(this_folder);
+          }
+          this_folder.add(this_model, 'Remove');
+          count += 1;
+        }
+      })
+    }
+
+    // remove obj
+    obj_model.Remove = () => {
+      obj.parent.remove(obj);
+      obj_folder.parent.removeFolder(obj_folder);
+    }
+    obj_folder.add(obj_model, 'Remove');
   }
 }

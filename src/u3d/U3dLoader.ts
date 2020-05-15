@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 14:25:59
+ * @LastEditTime: 2020-05-15 21:00:35
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
@@ -70,11 +70,10 @@ export namespace U3dLoader {
       console.log(root);
       root.traverse(function (child) {
         if (child.type === 'Mesh') {
-          u3d.gui.addModel(<THREE.Mesh>child, name);
           updateBOX(u3d, (<THREE.Mesh>child).geometry);
         }
       });
-      u3d.scene.add(root);
+      u3d.addOBJ(root, name);
 
       // set camera
       resetCamera(u3d);
@@ -94,30 +93,9 @@ export namespace U3dLoader {
       updateBOX(u3d, geometry);
       geometry.computeVertexNormals();
 
-      // material
-      // let defaultMaterial = new THREE.MeshStandardMaterial({ color: 0xDCF1FF });
-      // defaultMaterial.name = 'defaultMaterial';
-
-      // let defaultVertexColorMaterial = new THREE.MeshStandardMaterial({ color: 0xDCF1FF });
-      // defaultVertexColorMaterial.name = 'defaultVertexColorMaterial';
-      // defaultVertexColorMaterial.vertexColors = true;
-
-      // let defaultLineMaterial = new THREE.LineBasicMaterial();
-      // defaultLineMaterial.name = 'defaultLineMaterial';
-
-      // let defaultPointMaterial = new THREE.PointsMaterial({ size: 0.1 });
-      // defaultPointMaterial.name = 'defaultPointMaterial';
-
-      // let runtimeMaterials: any = {};
-      // runtimeMaterials[defaultMaterial.name] = defaultMaterial;
-      // runtimeMaterials[defaultVertexColorMaterial.name] = defaultVertexColorMaterial;
-      // runtimeMaterials[defaultLineMaterial.name] = defaultLineMaterial;
-      // runtimeMaterials[defaultPointMaterial.name] = defaultPointMaterial;
-
       let material = new THREE.MeshStandardMaterial({ color: 0xDCF1FF, vertexColors: true });
       let mesh = new THREE.Mesh(geometry, material);
-      u3d.gui.addModel(mesh, name);
-      u3d.scene.add(mesh);
+      u3d.addMesh(mesh, name);
 
       resetCamera(u3d);
     }, (xhr) => {

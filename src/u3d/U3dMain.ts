@@ -4,12 +4,13 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 21:14:20
+ * @LastEditTime: 2020-05-15 21:03:23
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import THREE = require('three');
 import { U3dUI } from './ui/u3dUI'
+import { U3dModelMenu } from './ui/u3dModelMenu';
 
 export class U3dMain {
   scene: THREE.Scene;
@@ -58,5 +59,15 @@ export class U3dMain {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.control.update();
+  }
+
+  addMesh(mesh: THREE.Mesh, filename: string) {
+    this.scene.add(mesh);
+    this.gui.addModel(mesh, filename);
+  }
+
+  addOBJ(obj: THREE.Object3D, filename: string) {
+    this.scene.add(obj);
+    this.gui.addOBJ(obj, filename);
   }
 }
