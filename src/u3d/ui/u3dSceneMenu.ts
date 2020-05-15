@@ -4,28 +4,28 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 23:35:01
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 23:35:18
+ * @LastEditTime: 2020-05-15 11:57:02
  */
 
 export class U3dSceneMenu {
-  background: string;
+  Background: string;
   // axis
-  showAxis: boolean;
-  axisLength: number;
+  ShowAxis: boolean;
+  AxisLength: number;
   //grid
-  showGrid: boolean;
+  ShowGrid: boolean;
   gridSize: number;
   gridDivisions: number;
   gridColorCenterLine: string;
   gridColorGrid: string;
 
   constructor() {
-    this.background = '#f0f0f0';
+    this.Background = '#f0f0f0';
 
-    this.showAxis = false;
-    this.axisLength = 0.3;
+    this.ShowAxis = false;
+    this.AxisLength = 0.3;
 
-    this.showGrid = false;
+    this.ShowGrid = false;
     this.gridSize = 1;
     this.gridDivisions = 10;
     this.gridColorCenterLine = '#444444';

@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 21:01:29
+ * @LastEditTime: 2020-05-15 14:16:37
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
@@ -29,6 +29,11 @@ export namespace U3dLoader {
     u3d.camera.updateProjectionMatrix();
     u3d.control.target = scene_center;
     u3d.control.update();
+  }
+
+  function filename(path: string): string {
+    let file = path.replace(/(.*\/)*([^.]+).*/ig, "$2") + '.' + path.replace(/.+\./, "");
+    return file;
   }
 
   function updateBOX(u3d: U3dMain, geometry: THREE.Geometry | THREE.BufferGeometry) {
@@ -58,10 +63,14 @@ export namespace U3dLoader {
   function loadOBJ(path: string, u3d: U3dMain) {
     // add geometry
     const objLoader = new OBJLoader2();
+    objLoader.setUseIndices(true);
+    let name = filename(path);
     objLoader.load(path, (root) => {
       console.log('loading...');
+      console.log(root);
       root.traverse(function (child) {
         if (child.type === 'Mesh') {
+          u3d.gui.addModel(<THREE.Mesh>child, name);
           updateBOX(u3d, (<THREE.Mesh>child).geometry);
         }
       });
