@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 00:07:48
+ * @LastEditTime: 2020-05-16 01:13:12
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
@@ -58,8 +58,7 @@ export class U3dMain {
       let color = parseInt(light_ambient_config.Color.replace('#', '0x'), 16);
       let light_ambient = new THREE.AmbientLight(color, light_ambient_config.Intensity);
       this.scene.add(light_ambient);
-      let light_ambient_folder = this.gui.lightsFolder.addFolder((light_ambient_config.Type + ' - ' + light_ambient.uuid).substr(0, 30));
-      this.gui.addLight(light_ambient_config, light_ambient_folder, light_ambient);
+      this.gui.addLight(light_ambient_config, light_ambient);
     }
 
     // init point light
@@ -71,8 +70,7 @@ export class U3dMain {
       let color = parseInt(light_point_config.Color.replace('#', '0x'), 16);
       let light_point = new THREE.PointLight(color, light_point_config.Intensity);
       this.camera.add(light_point);
-      let light_point_folder = this.gui.lightsFolder.addFolder((light_point_config.Type + ' - ' + light_point.uuid).substr(0, 30));
-      this.gui.addLight(light_point_config, light_point_folder, light_point);
+      this.gui.addLight(light_point_config, light_point);
     }
   }
 

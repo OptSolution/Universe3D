@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 23:55:59
+ * @LastEditTime: 2020-05-16 01:12:49
  */
 import dat = require('dat.gui');
 import THREE = require('three');
@@ -138,10 +138,9 @@ export class U3dUI {
   // ====================================================== //
   // ====================== Light ========================= //
   // ====================================================== //
-  addLight(lightConfig: U3dLightMenu, lightsFolder: dat.GUI, light: THREE.Light) {
-    // clean folder
-    lightsFolder.__controllers.forEach((controller) => controller.remove());
-    lightsFolder.__controllers = [];
+  addLight(lightConfig: U3dLightMenu, light: THREE.Light) {
+    // new folder
+    let lightsFolder = this.lightsFolder.addFolder((lightConfig.Type + ' - ' + light.uuid).substr(0, 30));
 
     // add controller
     lightsFolder.add(lightConfig, 'Bind').domElement.innerHTML = lightConfig.Bind;
@@ -184,8 +183,5 @@ export class U3dUI {
       lightsFolder.parent.removeFolder(lightsFolder);
     }
     lightsFolder.add(lightConfig, 'Remove');
-
-    // rename
-    lightsFolder.name = (lightConfig.Type + ' - ' + light.uuid).substr(0, 30);
   }
 }
