@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 14:16:37
+ * @LastEditTime: 2020-05-15 14:25:59
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
@@ -88,6 +88,7 @@ export namespace U3dLoader {
 
   function loadPLY(path: string, u3d: U3dMain) {
     const plyloader = new PLYLoader();
+    let name = filename(path);
     plyloader.load(path, (geometry) => {
       console.log('loading...');
       updateBOX(u3d, geometry);
@@ -115,6 +116,7 @@ export namespace U3dLoader {
 
       let material = new THREE.MeshStandardMaterial({ color: 0xDCF1FF, vertexColors: true });
       let mesh = new THREE.Mesh(geometry, material);
+      u3d.gui.addModel(mesh, name);
       u3d.scene.add(mesh);
 
       resetCamera(u3d);
