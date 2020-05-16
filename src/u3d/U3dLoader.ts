@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 11:54:27
+ * @LastEditTime: 2020-05-16 19:49:12
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");

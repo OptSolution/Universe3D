@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 12:56:01
+ * @LastEditTime: 2020-05-16 20:36:32
  */
 import dat = require('dat.gui');
 import THREE = require('three');
@@ -85,7 +85,46 @@ export class U3dUI {
     // visible
     folder.add(guiData, 'Visible').onChange((v) => {
       mesh.visible = v;
-    })
+    });
+
+    console.log(mesh.material);
+
+    // material
+    let material_folder = folder.addFolder('Material');
+    material_folder.add(guiData, 'Type', ['MeshStandardMaterial']).onChange((material) => {
+      // TODO: change material
+    });
+    switch ((<THREE.Material>mesh.material).type) {
+      case 'MeshStandardMaterial':
+        material_folder.addColor(guiData, 'Color').onChange((color) => {
+          color = parseInt(color.replace('#', '0x'), 16);
+          (<THREE.MeshStandardMaterial>mesh.material).color = new THREE.Color(color);
+        });
+        guiData.ShadowSide = (<THREE.MeshStandardMaterial>mesh.material).side;
+        material_folder.add(guiData, 'ShadowSide', { FrontSide: THREE.FrontSide, BackSide: THREE.BackSide, DoubleSide: THREE.DoubleSide }).onChange((side) => {
+          (<THREE.MeshStandardMaterial>mesh.material).side = parseInt(side);
+          (<THREE.MeshStandardMaterial>mesh.material).needsUpdate = true;
+        });
+        guiData.VertexColors = (<THREE.MeshStandardMaterial>mesh.material).vertexColors;
+        material_folder.add(guiData, 'VertexColors').onChange((vertexColor) => {
+          (<THREE.MeshStandardMaterial>mesh.material).vertexColors = vertexColor;
+          (<THREE.MeshStandardMaterial>mesh.material).needsUpdate = true;
+        });
+        material_folder.add(guiData, 'FlatShading').onChange((flat) => {
+          (<THREE.MeshStandardMaterial>mesh.material).flatShading = flat;
+          (<THREE.MeshStandardMaterial>mesh.material).needsUpdate = true;
+        });
+        material_folder.add(guiData, 'Wireframe').onChange((wire) => {
+          (<THREE.MeshStandardMaterial>mesh.material).wireframe = wire;
+        });
+        material_folder.add(guiData, 'WireframeLinewidth', 0, 10).onChange((width) => {
+          (<THREE.MeshStandardMaterial>mesh.material).wireframeLinewidth = width;
+        })
+        break;
+
+      default:
+        break;
+    }
   }
 
   addModel(mesh: THREE.Mesh, filename: string) {
