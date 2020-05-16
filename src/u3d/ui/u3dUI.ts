@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 01:12:49
+ * @LastEditTime: 2020-05-16 12:56:01
  */
 import dat = require('dat.gui');
 import THREE = require('three');
@@ -142,7 +142,7 @@ export class U3dUI {
     // new folder
     let lightsFolder = this.lightsFolder.addFolder((lightConfig.Type + ' - ' + light.uuid).substr(0, 30));
 
-    // add controller
+    // add common controller
     lightsFolder.add(lightConfig, 'Bind').domElement.innerHTML = lightConfig.Bind;
     lightsFolder.addColor(lightConfig, 'Color').onChange((colorValue) => {
       colorValue = parseInt(colorValue.replace('#', '0x'), 16);
@@ -152,6 +152,7 @@ export class U3dUI {
       light.intensity = intensity;
     });
 
+    // each type
     switch (light.type) {
       case 'PointLight':
         lightsFolder.add(lightConfig, 'Distance').onChange((distance) => {
@@ -176,6 +177,11 @@ export class U3dUI {
       default:
         break;
     }
+
+    // visible
+    lightsFolder.add(lightConfig, 'Visible').onChange((v) => {
+      light.visible = v;
+    })
 
     // remove
     lightConfig.Remove = () => {

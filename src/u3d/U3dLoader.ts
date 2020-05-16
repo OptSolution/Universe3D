@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 21:23:35
+ * @LastEditTime: 2020-05-16 11:54:27
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
@@ -84,7 +84,6 @@ export namespace U3dLoader {
 
     objLoader.load(path, (root) => {
       console.log('loading...');
-      console.log(root);
       root.traverse(function (child) {
         if (child.type === 'Mesh') {
           updateBOX(u3d, (<THREE.Mesh>child).geometry);

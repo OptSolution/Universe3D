@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-15 23:06:55
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-15 23:52:52
+ * @LastEditTime: 2020-05-16 12:54:40
  */
 
 export class U3dLightMenu {
@@ -19,6 +19,7 @@ export class U3dLightMenu {
   Position_y: number;
   Position_z: number;
 
+  Visible: boolean;
   Remove: Function;
 
   constructor() {
@@ -34,5 +35,18 @@ export class U3dLightMenu {
     this.Position_x = 0.0;
     this.Position_y = 0.0;
     this.Position_z = 0.0;
+
+    this.Visible = true;
+  }
+}
+
+export class U3dAddLightMenu {
+  AddLight: Function;
+  Cancel: Function;
+  Next: Function;
+  Save: Function;
+
+  constructor() {
+
   }
 }
