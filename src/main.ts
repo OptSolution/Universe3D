@@ -4,7 +4,7 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:45:29
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 23:40:44
+ * @LastEditTime: 2020-05-16 22:27:44
  */
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
@@ -32,6 +32,15 @@ function createWindow() {
           label: "Open ...",
           click() {
             mainWindow.webContents.send('action', 'openFile');
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: "Save as PNG",
+          click() {
+            mainWindow.webContents.send('action', 'savePNG');
           }
         },
         {

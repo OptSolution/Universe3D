@@ -4,11 +4,12 @@
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-03 16:48:41
  * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-14 21:41:56
+ * @LastEditTime: 2020-05-16 23:51:09
  */
 
 import { ipcRenderer, remote } from 'electron';
 import U3D = require('./u3d/u3d');
+import fs = require('fs');
 
 var u3dMain: U3D.U3dMain = new U3D.U3dMain();
 animate();
@@ -20,6 +21,9 @@ ipcRenderer.on('action', (event, arg) => {
   switch (arg) {
     case 'openFile':
       loadFile();
+      break;
+    case 'savePNG':
+      savePNG();
       break;
   }
 });
@@ -64,4 +68,27 @@ function loadFile() {
   }).catch(err => {
     console.log(err);
   });
+}
+
+function savePNG() {
+  u3dMain.renderer.render(u3dMain.scene, u3dMain.camera);
+  const url = u3dMain.renderer.domElement.toDataURL();
+  // window.open(url, 'shot');
+  // remove Base64 stuff from the Image
+  const base64Data = url.replace(/^data:image\/png;base64,/, "");
+  remote.dialog.showSaveDialog(remote.getCurrentWindow(),
+    {
+      filters: [
+        { name: 'Images', extensions: ['png'] },
+        { name: 'All Files', extensions: ['*'] }
+      ]
+    }).then(result => {
+      if (!result.canceled) {
+        fs.writeFile(result.filePath, base64Data, 'base64', function (err) {
+          console.log(err);
+        });
+      }
+    }).catch(err => {
+      console.log(err)
+    });
 }
