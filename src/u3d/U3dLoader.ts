@@ -3,13 +3,14 @@
  * @Author: Chen Wang
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 21:24:50
- * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 19:49:12
+ * @LastAuthor: Chen Wang
+ * @lastTime: 2020-05-26 19:27:13
  */
 import { U3dMain } from "./U3dMain";
 import THREE = require("three");
 import { OBJLoader2 } from "three/examples/jsm/loaders/OBJLoader2";
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
+import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader";
 
 class loadBar {
   File: string;
@@ -64,7 +65,10 @@ export namespace U3dLoader {
       loadOBJ(path, u3d);
     } else if (ext === 'ply') {
       loadPLY(path, u3d);
-    } else {
+    } else if (ext === 'pcd') {
+      loadPCD(path, u3d);
+    }
+    else {
       alert('Cannot load ' + path);
     }
   }
@@ -123,6 +127,34 @@ export namespace U3dLoader {
 
       loadingFolder.parent.removeFolder(loadingFolder);
       u3d.addMesh(mesh, name);
+      resetCamera(u3d);
+    }, (xhr) => {
+      let process = xhr.loaded / xhr.total * 100
+      loadingMenu.Loading = process;
+      console.log(process + '% loaded');
+    }, (err) => {
+      console.error(err.message);
+    })
+  }
+
+  function loadPCD(path: string, u3d: U3dMain) {
+    const pcdloader = new PCDLoader();
+    let name = filename(path);
+
+    // gui for loading
+    let loadingFolder = u3d.gui.modelFolder.addFolder('Loading');
+    let loadingMenu = new loadBar();
+    loadingFolder.add(loadingMenu, 'File').domElement.innerHTML = name;
+    loadingFolder.add(loadingMenu, 'Loading', 0, 100).listen();
+    loadingFolder.open();
+
+    pcdloader.load(path, (mesh) => {
+      console.log('loading...');
+      updateBOX(u3d, mesh.geometry);
+      mesh.geometry.computeBoundingBox();
+
+      loadingFolder.parent.removeFolder(loadingFolder);
+      u3d.addPCD(mesh, name);
       resetCamera(u3d);
     }, (xhr) => {
       let process = xhr.loaded / xhr.total * 100

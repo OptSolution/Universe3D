@@ -3,8 +3,8 @@
  * @Author: Chen Wang
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-15 11:52:14
- * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 20:12:55
+ * @LastAuthor: Chen Wang
+ * @lastTime: 2020-05-26 19:54:38
  */
 
 export class U3dModelMenu {
@@ -36,5 +36,24 @@ export class U3dModelMenu {
     this.FlatShading = false;
     this.Wireframe = false;
     this.WireframeLinewidth = 1;
+  }
+}
+
+export class U3dPointsMenu {
+  Points: number;
+  Visible: boolean;
+  Remove: Function;
+
+  Size: number;
+  VertexColors: boolean;
+  Color: string;
+
+  constructor() {
+    this.Points = 0;
+    this.Visible = true;
+
+    this.Size = 0.01;
+    this.VertexColors = true;
+    this.Color = '#DCF1FF';
   }
 }

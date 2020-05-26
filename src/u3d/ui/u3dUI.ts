@@ -3,13 +3,13 @@
  * @Author: Chen Wang
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-14 20:55:40
- * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 20:36:32
+ * @LastAuthor: Chen Wang
+ * @lastTime: 2020-05-26 19:53:57
  */
 import dat = require('dat.gui');
 import THREE = require('three');
 import { U3dSceneMenu } from './u3dSceneMenu'
-import { U3dModelMenu } from "./u3dModelMenu";
+import { U3dModelMenu, U3dPointsMenu } from "./u3dModelMenu";
 import { U3dLightMenu } from "./u3dLightMenu";
 
 export class U3dUI {
@@ -86,8 +86,6 @@ export class U3dUI {
     folder.add(guiData, 'Visible').onChange((v) => {
       mesh.visible = v;
     });
-
-    console.log(mesh.material);
 
     // material
     let material_folder = folder.addFolder('Material');
@@ -167,6 +165,47 @@ export class U3dUI {
     }
 
     // remove obj
+    obj_model.Remove = () => {
+      obj.parent.remove(obj);
+      obj_folder.parent.removeFolder(obj_folder);
+    }
+    obj_folder.add(obj_model, 'Remove');
+  }
+
+  addPCD(obj: THREE.Points, filename: string) {
+    let obj_folder = this.modelFolder.addFolder((filename + ' - ' + obj.uuid).substr(0, 30));
+    let obj_model = new U3dPointsMenu();
+
+    // add points number
+    let vMenu = obj_folder.add(obj_model, 'Points');
+    if (obj.geometry.type === 'Geometry') {
+      vMenu.domElement.innerHTML = String((<THREE.Geometry>obj.geometry).vertices.length);
+    } else if (obj.geometry.type === 'BufferGeometry') {
+      vMenu.domElement.innerHTML = String((<THREE.BufferGeometry>obj.geometry).getAttribute('position').count);
+    }
+
+    // visible
+    obj_folder.add(obj_model, 'Visible').onChange((v) => {
+      obj.visible = v;
+    });
+
+    // size
+    (<THREE.PointsMaterial>obj.material).size = obj_model.Size;
+    obj_folder.add(obj_model, 'Size').onChange((size) => {
+      (<THREE.PointsMaterial>obj.material).size = size;
+    })
+
+    // color
+    obj_folder.add(obj_model, 'VertexColors').onChange((vertexColor) => {
+      (<THREE.PointsMaterial>obj.material).vertexColors = vertexColor;
+      (<THREE.PointsMaterial>obj.material).needsUpdate = true;
+    })
+    obj_folder.addColor(obj_model, 'Color').onChange((color) => {
+      color = parseInt(color.replace('#', '0x'), 16);
+      (<THREE.PointsMaterial>obj.material).color = new THREE.Color(color);
+    })
+
+    // remove
     obj_model.Remove = () => {
       obj.parent.remove(obj);
       obj_folder.parent.removeFolder(obj_folder);

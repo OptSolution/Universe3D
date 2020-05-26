@@ -3,8 +3,8 @@
  * @Author: Chen Wang
  * @Email: mr_cwang@foxmail.com
  * @Date: 2020-05-04 20:01:02
- * @LastEditors: Chen Wang
- * @LastEditTime: 2020-05-16 12:54:08
+ * @LastAuthor: Chen Wang
+ * @lastTime: 2020-05-26 19:43:15
  */
 
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
@@ -181,5 +181,10 @@ export class U3dMain {
   addOBJ(obj: THREE.Object3D, filename: string) {
     this.scene.add(obj);
     this.gui.addOBJ(obj, filename);
+  }
+
+  addPCD(obj: THREE.Points, filename: string) {
+    this.scene.add(obj);
+    this.gui.addPCD(obj, filename);
   }
 }
