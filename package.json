@@ -12,7 +12,7 @@
   "author": "Chen Wang",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^8.2.3",
+    "electron": "^8.2.4",
     "path": "^0.12.7",
     "three": "^0.115.0",
     "tslint": "^6.1.2",
